@@ -3,115 +3,110 @@ title: API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell
-  - ruby
-  - python
-  - javascript
+  # - ruby
+  # - python
+  # - javascript
 
-toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a>
+# toc_footers:
+#   - <a href='#'>Sign Up for a Developer Key</a>
+#   - <a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a>
 
 includes:
   - errors
-
-search: true
+# search: true
 ---
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Welcome to the EATEN API! You can use our API to access EATEN API endpoints, which can get information on various orders in our database.
 
-We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
-
-This example API documentation page was created with [Slate](https://github.com/slatedocs/slate). Feel free to edit it and use it as a base for your own API's documentation.
+We have language bindings in Shell. You can view code examples in the dark area to the right.
 
 # Authentication
 
-> To authorize, use this code:
+> To get JWT token, use this code:
 
+<!--
 ```ruby
-require 'kittn'
+require 'EATEN'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
+api = EATEN::APIClient.authorize!('meowmeowmeow')
 ```
 
 ```python
-import kittn
+import EATEN
 
-api = kittn.authorize('meowmeowmeow')
-```
+api = EATEN.authorize('meowmeowmeow')
+``` -->
 
 ```shell
 # With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
+curl --location --request POST '<url>/api/v1/login' \
+--header 'Content-Type: application/json' \
+--data '{
+    "username": "test",
+    "password": "test"
+}'
 ```
 
-```javascript
-const kittn = require('kittn');
+<!-- ```javascript
+const EATEN = require("EATEN");
 
-let api = kittn.authorize('meowmeowmeow');
-```
+let api = EATEN.authorize("meowmeowmeow");
+``` -->
 
-> Make sure to replace `meowmeowmeow` with your API key.
+> Make sure to replace `username,password` with yours.
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
+EATEN uses JWT token to allow access to the API. You can register a new JWT token by using a register endpoint below.
 
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
+EATEN expects for the API key to be included in all API requests to the server in a header that looks like the following:
 
-`Authorization: meowmeowmeow`
+`Authorization: <Token>`
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+You must replace <code>Token</code> with your personal JWT token.
 </aside>
 
-# Kittens
+# Endpoints
 
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
+## Get All Orders
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+curl --location --request GET '<url>/api/v1/orders/' \
+--header 'Authorization: Bearer <Token>'
 ```
 
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
+> The above command returns array structured like this:
 
 ```json
 [
   {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
+    "products": [
+      {
+        "name": "Croissant",
+        "productID": "12345"
+      }
+    ],
+    "_id": "abcde1",
+    "customerName": "Chris Foo",
+    "address": "12345",
+    "time": "2020-04-25T08:00:00.000Z",
+    "area": "Pathumwan",
+    "price": "123"
   },
   {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+    "products": [
+      {
+        "name": "Croissant",
+        "productID": "12346"
+      }
+    ],
+    "_id": "abcde2",
+    "customerName": "John Doe",
+    "address": "11000 St",
+    "time": "2020-04-25T09:00:00.000Z",
+    "area": "Sukhumvit",
+    "price": "456"
   }
 ]
 ```
@@ -120,120 +115,212 @@ This endpoint retrieves all kittens.
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`GET /api/v1/orders`
 
-### Query Parameters
+### Headers
 
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+**Authorization**&nbsp;&nbsp;&nbsp;&nbsp; Bearer \<Token>
 
-<aside class="success">
+<!-- ### Query Parameters
+
+| Parameter    | Default | Description                                                                      |
+| ------------ | ------- | -------------------------------------------------------------------------------- |
+| include_cats | false   | If set to true, the result will also include cats.                               |
+| available    | true    | If set to false, the result will include kittens that have already been adopted. | -->
+
+<!-- <aside class="success">
 Remember — a happy kitten is an authenticated kitten!
-</aside>
+</aside> -->
 
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
+## Get Today Order
 
 ```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
+curl --location --request GET '<url>/api/v1/orders/today' \
+--header 'Authorization: Bearer <Token>'
 ```
 
-```javascript
-const kittn = require('kittn');
+> The above command returns array structured like this:
 
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
+```json
+[
+  {
+    "products": [
+      {
+        "name": "Croissant",
+        "productID": "12345"
+      }
+    ],
+    "_id": "abcde1",
+    "customerName": "Chris Foo",
+    "address": "12345",
+    "time": "2020-04-25T08:00:00.000Z",
+    "area": "Pathumwan",
+    "price": "123"
+  }
+]
+```
+
+This endpoint retrieves all orders for today.
+
+<aside class="warning">This endpoint will return an array of objects</aside>
+
+### HTTP Request
+
+`GET /api/v1/orders/today`
+
+### Headers
+
+**Authorization**&nbsp;&nbsp;&nbsp;&nbsp; Bearer \<Token>
+
+## Get Order By ID
+
+```shell
+curl --location --request GET '<url>/api/v1/orders/<id>' \
+--header 'Authorization: Bearer <Token>'
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+  "products": [
+    {
+      "name": "Croissant",
+      "productID": "12345"
+    }
+  ],
+  "_id": "abcde1",
+  "customerName": "Chris Foo",
+  "address": "12345",
+  "time": "2020-04-25T08:00:00.000Z",
+  "area": "Pathumwan",
+  "price": "123"
 }
 ```
 
-This endpoint retrieves a specific kitten.
+This endpoint retrieves all orders for today.
 
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+<aside class="warning">This endpoint will return an object</aside>
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`GET /api/v1/orders/<id>`
+
+### Headers
+
+**Authorization**&nbsp;&nbsp;&nbsp;&nbsp; Bearer \<Token>
 
 ### URL Parameters
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
+| Parameter | Description                     |
+| --------- | ------------------------------- |
+| id        | The ID of the order to retrieve |
 
-## Delete a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
+## Add Order
 
 ```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
+curl --location --request POST 'https://dev.sprawl.team/api/v1/orders' \
+--header 'Authorization: Bearer <Token'
+--header 'Content-Type: application/json' \
+--data '{
+    "customerName": "John Foo",
+    "address": "Earth",
+    "round": 1,
+    "area": "Mars",
+    "restaurant": "test",
+    "products": [
+        {
+            "name": "Croissant",
+            "productID": "1234"
+        }
+    ],
+    "price": "234"
+}'
 ```
 
-```javascript
-const kittn = require('kittn');
+> The above command returns a status like this:
 
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
+```
+OK
 ```
 
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "deleted" : ":("
-}
-```
-
-This endpoint deletes a specific kitten.
+This endpoint is use to add new order.
 
 ### HTTP Request
 
-`DELETE http://example.com/kittens/<ID>`
+`POST /api/v1/orders`
+
+### Headers
+
+**Authorization**&nbsp;&nbsp;&nbsp;&nbsp; Bearer \<Token>
+
+### Body
+
+`{ "customerName": "John Foo", "address": "Earth", "round": 1, "area": "Mars", "restaurant": "test", "products": [ { "name": "Croissant", "productID": "1234" } ], "price": "234" }`
+
+## Update Order
+
+```shell
+curl --location --request PUT '<url>/api/v1/orders' \
+--header 'Authorization: Bearer <Token>' \
+--header 'Content-Type: application/json' \
+--data ' {
+        "products": [
+        {
+            "name": "Croissant",
+            "productID": "1234"
+        }
+        ],
+        "_id": "abcde",
+        "customerName": "John Foo",
+        "address": "North Pole",
+        "time": "2020-04-25T08:00:00.000Z",
+        "area": "51",
+        "price": "1234"
+    }'
+```
+
+> The above command returns a status like this:
+
+```
+OK
+```
+
+This endpoint is use to add new order.
+
+### HTTP Request
+
+`PUT /api/v1/orders`
+
+### Headers
+
+**Authorization**&nbsp;&nbsp;&nbsp;&nbsp; Bearer \<Token>
+
+### Body
+
+`{ "products": [ { "name": "Croissant", "productID": "1234" } ], "_id": "abcde", "customerName": "John Foo", "address": "North Pole", "time": "2020-04-25T08:00:00.000Z", "area": "51", "price": "1234" }`
+
+## Delete a Specific Order
+
+```shell
+curl --location --request DELETE '<url>/api/v1/orders/<ID>' \
+--header 'Authorization: Bearer <Token>'
+```
+
+> The above command returns a status like this:
+
+```
+OK
+```
+
+This endpoint deletes a specific order.
+
+### HTTP Request
+
+`DELETE <url>/api/v1/orders/<ID>`
 
 ### URL Parameters
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
-
+| Parameter | Description                   |
+| --------- | ----------------------------- |
+| ID        | The ID of the order to delete |
